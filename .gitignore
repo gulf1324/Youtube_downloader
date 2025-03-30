@@ -1,7 +1,7 @@
 # Build and distribution artifacts
-ddd.build/
-ddd.dist/
-ddd.dist.zip
+Youtube_downloader.build/
+Youtube_downloader.dist/
+Youtube_downloader.dist.zip
 
 # Binary dependencies
 ffmpeg.exe
@@ -9,6 +9,7 @@ python39.dll
 
 # misc
 build_instructions.txt
+RELEASE_NOTES.MD
 
 # Python-specific ignores
 __pycache__/
