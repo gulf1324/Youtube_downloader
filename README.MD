@@ -1,6 +1,6 @@
 # YouTube Downloader
 
-A simple Python script to download YouTube videos.
+A simple Python script to download YouTube videos to **fixed 720p** resolution.
 
 ## Features
 - Built with `yt_dlp` for reliable video downloading
