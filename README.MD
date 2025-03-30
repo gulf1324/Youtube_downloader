@@ -1,6 +1,6 @@
 # YouTube Downloader
 
-A simple Python script to download YouTube videos to **fixed 720p** resolution.
+A simple Python script to download YouTube videos.
 
 ## Features
 - Built with `yt_dlp` for reliable video downloading
@@ -33,7 +33,7 @@ A simple Python script to download YouTube videos to **fixed 720p** resolution.
 ### 2. *Building the Executable*
 To create a standalone `.exe` file (Windows):
 1. Install Nuitka: `pip install nuitka`
-2. Run the build command in the project folder and run: 
+2. Run the build command in the project folder: 
   ```
   nuitka --standalone --onefile ^
   --enable-plugin=data-files ^
