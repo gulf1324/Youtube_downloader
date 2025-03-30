@@ -28,8 +28,8 @@ A simple Python script to download YouTube videos to **fixed 720p** resolution.
 1. Clone or download this repository.
 2. Ensure `ffmpeg.exe` is in the same directory as `Youtube_downloader.py` (or in your PATH).
 3. Open a terminal in the project folder and run: `python Youtube_downloader.py`
-4. Follow the prompt:
-- Enter the YouTube URL and press Enter
+4. Follow the prompt.
+
 ### 2. *Building the Executable*
 To create a standalone `.exe` file (Windows):
 1. Install Nuitka: `pip install nuitka`
@@ -46,8 +46,6 @@ To create a standalone `.exe` file (Windows):
 4. Run the `.exe` file and follow the same prompts as above.
 ---
 
-## Output
-- Video is saved as `downloaded_video.mp4`.
 
 ## Troubleshooting
 - **FFmpeg not found**: Ensure `ffmpeg.exe` is in the correct location or PATH.
