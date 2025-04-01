@@ -4,6 +4,14 @@ A simple Python script to download YouTube videos.
 
 ## Features
 - Built with `yt_dlp` for reliable video downloading
+### Supported Resolutions
+| Resolution | Supported |
+|------------|-----------|
+| 360p       | Yes       |
+| 480p       | Yes       |
+| 720p       | Yes       |
+| 1080p      | Yes       |
+| best       | Yes       |
 
 ## Prerequisites
 
@@ -34,16 +42,14 @@ A simple Python script to download YouTube videos.
 To create a standalone `.exe` file (Windows):
 1. Install Nuitka: `pip install nuitka`
 2. Run the build command in the project folder: 
-  ```
-  nuitka --standalone --onefile ^
-  --enable-plugin=data-files ^
-  --include-data-file="python39.dll=python39.dll" ^
+```
+nuitka --standalone --onefile ^
   --include-data-file="ffmpeg.exe=ffmpeg.exe" ^
   --windows-console-mode=force ^
   Youtube_downloader.py
-  ```
-3. Find the executable in the `dist/` folder.
-4. Run the `.exe` file and follow the same prompts as above.
+```
+3. Find the executable in the project folder.
+4. Run the `.exe` file and follow the prompt.
 ---
 
 
