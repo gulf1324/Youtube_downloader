@@ -7,21 +7,21 @@ def get_valid_resolution(is_shorts):
     if is_shorts:
         valid_resolutions = {
                 "best": "bv*[vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]/best",  
-                "1080" : "bv[width=1080][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
-                "720": "bv[width=720][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
-                "480": "bv[width=480][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
-                "360": "bv[width=360][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
+                "1080" : "bv[width<=1080][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
+                "720": "bv[width<=720][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
+                "480": "bv[width<=480][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
+                "360": "bv[width<=360][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
             }
     else:
         valid_resolutions = {
                 "best": "bv*[vcodec!~='^av01']+ba[ext=m4a]/best",  
-                "1080" : "bv[height=1080][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
-                "720": "bv[height=720][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
-                "480": "bv[height=480][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
-                "360": "bv[height=360][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
+                "1080" : "bv[height<=1080][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
+                "720": "bv[height<=720][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
+                "480": "bv[height<=480][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
+                "360": "bv[height<=360][vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]",
             }
     while True:
-        resolution = input("Enter desired resolution (360, 480, 720, 1080): ").strip()
+        resolution = input("Enter desired resolution (360, 480, 720, 1080, best): ").strip()
         if resolution in valid_resolutions:
             resolution = valid_resolutions[resolution]
             return resolution
