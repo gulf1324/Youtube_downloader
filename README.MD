@@ -32,13 +32,18 @@ A simple Python script to download YouTube videos.
 
 ---
 ## Usage
-### 1. *Running the Script*
+
+### 1. *Downloading the executable*
+1. Download the `Youtube_downloader_{version}.exe` file from [Releases](https://github.com/gulf1324/Youtube_downloader/releases).
+2. Run the `.exe` file and follow the prompt.
+
+### 2. *Running the Script*
 1. Clone or download this repository.
 2. Ensure `ffmpeg.exe` is in the same directory as `Youtube_downloader.py` (or in your PATH).
 3. Open a terminal in the project folder and run: `python Youtube_downloader.py`
 4. Follow the prompt.
 
-### 2. *Building the Executable*
+### 3. *Building the Executable*
 To create a standalone `.exe` file (Windows):
 1. Install Nuitka: `pip install nuitka`
 2. Run the build command in the project folder: 
@@ -50,6 +55,7 @@ nuitka --standalone --onefile ^
 ```
 3. Find the executable in the project folder.
 4. Run the `.exe` file and follow the prompt.
+
 ---
 
 
