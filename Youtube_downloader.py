@@ -2,6 +2,27 @@ import yt_dlp
 import os
 from datetime import datetime
 import re
+import requests
+
+def check_yt_dlp_version():
+    print("Checking yt-dlp version...\n")
+    try:
+        response = requests.get('https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest')
+        response.raise_for_status()
+        latest_version = response.json()['tag_name']
+        current_version = yt_dlp.version.__version__
+        
+        if latest_version != current_version:
+            print(f"[INFO] A new version of yt-dlp is available: {latest_version} (current version: {current_version})")
+            print("        Please download the latest release from:")
+            print("        https://github.com/gulf1324/Youtube_downloader/releases/latest (Ctrl+Click)\n ")
+        else:
+            print(f"[INFO] yt-dlp is up to date (version: {current_version}).\n")
+
+    except requests.exceptions.RequestException as e:
+        print(f"[ERROR] Failed to retrieve the latest version from GitHub.\n        {e}\n")
+    except Exception as e:
+        print(f"[ERROR] Version check failed due to an unexpected error.\n        {e}\n")
 
 def get_valid_resolution(is_shorts):
     if is_shorts:
@@ -41,8 +62,6 @@ def download_youtube(url):
         'outtmpl': raw_video_path,
         'noplaylist': True,
         'quiet': False,
-        # 'ffmpeg_location': resource_path('ffmpeg.exe'),
-        #  commented ==> find on it's own
         'merge_output_format' : 'mp4',
     }
 
@@ -55,6 +74,7 @@ def download_youtube(url):
         print(f"\nError: {str(e)}")
 
 def main():
+    check_yt_dlp_version()
     while True:
         url = input("Enter the YouTube URL (or 'quit' to exit): ")
         if url.lower() == 'quit':
