@@ -20,9 +20,8 @@ jobs:
           if [ "$LATEST" != "$CURRENT" ]; then
             echo "new_version=$LATEST" >> $GITHUB_OUTPUT
             echo "$LATEST" > .yt-dlp-version
-            echo "Version updated from $CURRENT to $LATEST"
-            echo "Current dir: $(pwd)"
-            ls -al
+            echo "CURRENT=$CURRENT"
+            echo "LATEST=$LATEST"
           else
             echo "new_version=" >> $GITHUB_OUTPUT
             echo "Version is up to date: $CURRENT"
@@ -32,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: yt-dlp-version
-          path: .yt-dlp-version
+          path: /.yt-dlp-version
 
   build-windows:
     needs: check-yt-dlp-version
