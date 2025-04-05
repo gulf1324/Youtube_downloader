@@ -28,6 +28,10 @@ jobs:
             echo "Version is up to date: $CURRENT"
           fi
       - name: Upload version file
+        run: |
+          echo "PWD: $(pwd)"
+          ls -la
+          ls -la .yt-dlp-version || echo "File not found"
         if: steps.check.outputs.new_version != ''
         uses: actions/upload-artifact@v4
         with:
