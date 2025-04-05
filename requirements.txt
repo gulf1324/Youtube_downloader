@@ -1,0 +1,2 @@
+Nuitka==2.6.9
+requests==2.32.3
