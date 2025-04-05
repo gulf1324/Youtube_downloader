@@ -1,0 +1,92 @@
+name: Build and Release Windows Executable on yt-dlp Update
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # 매일 자정 실행
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  check-yt-dlp-version:
+    runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.check.outputs.new_version }}
+    steps:
+      - name: Check yt-dlp latest version
+        id: check
+        run: |
+          LATEST=$(curl -s https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+          CURRENT=$(cat .yt-dlp-version 2>/dev/null || echo "0")
+          if [ "$LATEST" != "$CURRENT" ]; then
+            echo "new_version=$LATEST" >> $GITHUB_OUTPUT
+            echo "$LATEST" > .yt-dlp-version
+          else
+            echo "new_version=" >> $GITHUB_OUTPUT
+          fi
+      - name: Upload version file
+        if: steps.check.outputs.new_version != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: yt-dlp-version
+          path: .yt-dlp-version
+
+  build-windows:
+    needs: check-yt-dlp-version
+    if: needs.check-yt-dlp-version.outputs.new_version != ''
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          pip install nuitka yt-dlp requests
+      - name: Download ffmpeg
+        run: |
+          curl -L -o ffmpeg.zip https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2024-09-30-15-36/ffmpeg-n7.1-win64-gpl-7.1.zip
+          7z x ffmpeg.zip -o"ffmpeg_dir"
+          copy ffmpeg_dir\ffmpeg-n7.1-win64-gpl-7.1\bin\ffmpeg.exe .
+        shell: cmd
+      - name: Build with Nuitka
+        run: |
+          python -m nuitka --standalone --onefile --nofollow-import-to=yt_dlp.extractor.lazy_extractors --include-data-file="ffmpeg.exe=ffmpeg.exe" --windows-console-mode=force Youtube_downloader.py
+        shell: cmd
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Youtube_downloader_windows
+          path: Youtube_downloader.exe
+
+  release:
+    needs: build-windows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set current date
+        id: date
+        run: echo "today=$(date +'%Y.%m.%d')" >> $GITHUB_OUTPUT
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Youtube_downloader_windows
+          path: .
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.check-yt-dlp-version.outputs.new_version }}-auto
+          name: Release ${{ needs.check-yt-dlp-version.outputs.new_version }} (Auto)
+          generate_release_notes: false
+          body: |
+            # YouTube Downloader 
+            ## Release Notes
+
+            > ## Version ${{ steps.date.outputs.today }}
+            > - *Release Date: ${{ steps.date.outputs.today }}*
+
+            > ### Updates
+            > - yt-dlp updated to ${{ needs.check-yt-dlp-version.outputs.new_version }}.
+          files: Youtube_downloader.exe 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
