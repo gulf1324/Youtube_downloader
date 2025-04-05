@@ -36,7 +36,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: yt-dlp-version
-          path: .
+          path: .yt-dlp-version
+          include-hidden-files: true
 
   build-windows:
     needs: check-yt-dlp-version
