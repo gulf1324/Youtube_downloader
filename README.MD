@@ -53,6 +53,15 @@ nuitka --standalone --onefile ^
   --windows-console-mode=force ^
   Youtube_downloader.py
 ```
+
+or for faster compile(excludes huge file):
+```
+nuitka --standalone --onefile ^
+  --nofollow-import-to=yt_dlp.extractor.lazy_extractors ^
+  --include-data-file="ffmpeg.exe=ffmpeg.exe" ^
+  --windows-console-mode=force ^
+  Youtube_downloader.py
+``` 
 3. Find the executable in the project folder.
 4. Run the `.exe` file and follow the prompt.
 
