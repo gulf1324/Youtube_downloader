@@ -40,9 +40,13 @@ jobs:
         with:
           python-version: '3.9'
           cache: 'pip'
-      - name: Install dependencies
-        run: |
-          pip install nuitka yt-dlp requests
+      
+      - name: Install cached dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Install latest yt-dlp from GitHub
+        run: pip install --upgrade yt-dlp
+      
       - name: Download ffmpeg
         run: |
           curl -L -o ffmpeg.zip https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2024-09-30-15-36/ffmpeg-n7.1-win64-gpl-7.1.zip
