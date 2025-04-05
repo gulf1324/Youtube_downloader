@@ -11,6 +11,7 @@ jobs:
     outputs:
       new_version: ${{ steps.check.outputs.new_version }}
     steps:
+      - uses: actions/checkout@v4
       - name: Check yt-dlp latest version
         id: check
         run: |
@@ -19,8 +20,10 @@ jobs:
           if [ "$LATEST" != "$CURRENT" ]; then
             echo "new_version=$LATEST" >> $GITHUB_OUTPUT
             echo "$LATEST" > .yt-dlp-version
+            echo "Version updated from $CURRENT to $LATEST"
           else
             echo "new_version=" >> $GITHUB_OUTPUT
+            echo "Version is up to date: $CURRENT"
           fi
       - name: Upload version file
         if: steps.check.outputs.new_version != ''
@@ -55,7 +58,7 @@ jobs:
         shell: cmd
       - name: Build with Nuitka
         run: |
-          python -m nuitka --standalone --onefile --nofollow-import-to=yt_dlp.extractor.lazy_extractors --include-data-file="ffmpeg.exe=ffmpeg.exe" --windows-console-mode=force Youtube_downloader.py
+          python -m nuitka --standalone --onefile --nofollow-import-to=yt_dlp.extractor.lazy_extractors --include-data-file="ffmpeg.exe=ffmpeg.exe" --windows-console-mode=force --assume-yes-for-downloads Youtube_downloader.py
         shell: cmd
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -68,14 +71,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: Set current date
         id: date
         run: echo "today=$(date +'%Y.%m.%d')" >> $GITHUB_OUTPUT
+      
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
           name: Youtube_downloader_windows
           path: .
+      
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -92,5 +98,21 @@ jobs:
             > ### Updates
             > - yt-dlp updated to ${{ needs.check-yt-dlp-version.outputs.new_version }}.
           files: Youtube_downloader.exe 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Download yt-dlp version artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: yt-dlp-version
+          path: .
+
+      - name: Commit and push updated yt-dlp version
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .yt-dlp-version
+          git commit -m "Update yt-dlp version to ${{ steps.check.outputs.new_version }}-auto"
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
