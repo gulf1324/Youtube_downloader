@@ -2,12 +2,12 @@
 Youtube_downloader.build/
 Youtube_downloader.dist/
 Youtube_downloader.dist.zip
-Youtube_downloader.exe
 Youtube_downloader.zip
 
 # Binary dependencies
 ffmpeg.exe
 python39.dll
+*.exe
 
 # misc
 build_instructions.txt
