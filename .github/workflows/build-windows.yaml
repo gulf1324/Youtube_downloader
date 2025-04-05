@@ -26,17 +26,17 @@ jobs:
             echo "new_version=" >> $GITHUB_OUTPUT
             echo "Version is up to date: $CURRENT"
           fi
-      - name: Move version file to the folder
-        run: |
-          mkdir version_artifact
-          mv .yt-dlp-version version_artifact/
+      # - name: Move version file to the folder
+      #   run: |
+      #     mkdir version_artifact
+      #     mv .yt-dlp-version version_artifact/
       
       - name: Upload version file
         if: steps.check.outputs.new_version != ''
         uses: actions/upload-artifact@v4
         with:
           name: yt-dlp-version
-          path: version_artifact/
+          path: .
 
   build-windows:
     needs: check-yt-dlp-version
@@ -111,13 +111,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: yt-dlp-version
-          path: version_artifact
+          path: .
 
       - name: Commit and push updated yt-dlp version
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          cp version_artifact/.yt-dlp-version .yt-dlp-version
           git add .yt-dlp-version
           git commit -m "Update yt-dlp version to ${{ steps.check.outputs.new_version }}-auto"
           git push
