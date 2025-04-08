@@ -15,21 +15,22 @@ jobs:
       - name: Check yt-dlp latest version
         id: check
         run: |
-          LATEST=$(curl -s https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+          LATEST=$(curl -s https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest | jq -r .tag_name)
           CURRENT=$(cat .yt-dlp-version 2>/dev/null || echo "0")
-          if [ "$LATEST" != "$CURRENT" ]; then
-            echo "new_version=$LATEST" >> $GITHUB_OUTPUT
-            echo "$LATEST" > .yt-dlp-version
-            echo "CURRENT=$CURRENT"
-            echo "LATEST=$LATEST"
+          if [[ "$LATEST" =~ ^[0-9]{4}\.[0-9]{2}\.[0-9]{2}$ ]]; then
+            if [ "$LATEST" != "$CURRENT" ]; then
+              echo "new_version=$LATEST" >> $GITHUB_OUTPUT
+              echo "$LATEST" > .yt-dlp-version
+              echo "CURRENT=$CURRENT"
+              echo "LATEST=$LATEST"
+            else
+              echo "new_version=" >> $GITHUB_OUTPUT
+              echo "Version is up to date: $CURRENT"
+            fi
           else
+            echo "::warning::Invalid version format detected: $LATEST"
             echo "new_version=" >> $GITHUB_OUTPUT
-            echo "Version is up to date: $CURRENT"
           fi
-      # - name: Move version file to the folder
-      #   run: |
-      #     mkdir version_artifact
-      #     mv .yt-dlp-version version_artifact/
       
       - name: Upload version file
         if: steps.check.outputs.new_version != ''
