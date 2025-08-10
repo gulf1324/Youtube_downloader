@@ -25,6 +25,21 @@ def check_yt_dlp_version():
         print(f"[ERROR] Version check failed due to an unexpected error.\n        {e}\n")
 
 def get_valid_resolution(is_shorts):
+    """
+    Shorts 영상인 경우 (is_shorts = True)
+        best: 가장 좋은 화질의 H.264/H.265/HEVC 코덱 비디오 + M4A 오디오를 결합해서 다운로드
+        1080: 가로 해상도 1080px 이하의 H.264/H.265 비디오 + M4A 오디오
+        720: 가로 해상도 720px 이하의 H.264/H.265 비디오 + M4A 오디오
+        480: 가로 해상도 480px 이하의 H.264/H.265 비디오 + M4A 오디오
+        360: 가로 해상도 360px 이하의 H.264/H.265 비디오 + M4A 오디오
+
+    일반 영상인 경우 (is_shorts = False)
+        best: AV1 코덱을 제외한 가장 좋은 화질의 비디오 + M4A 오디오를 다운로드
+        1080: 세로 해상도 1080px 이하(1080p)의 H.264/H.265 비디오 + M4A 오디오
+        720: 세로 해상도 720px 이하(720p)의 H.264/H.265 비디오 + M4A 오디오
+        480: 세로 해상도 480px 이하(480p)의 H.264/H.265 비디오 + M4A 오디오
+        360: 세로 해상도 360px 이하(360p)의 H.264/H.265 비디오 + M4A 오디오
+    """
     if is_shorts:
         valid_resolutions = {
                 "best": "bv*[vcodec~='^((he|a)vc|h26[45])']+ba[ext=m4a]/best",  
