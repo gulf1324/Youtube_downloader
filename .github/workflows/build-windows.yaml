@@ -66,7 +66,7 @@ jobs:
         shell: cmd
       - name: Build with Nuitka
         run: |
-          set CERTIFI_PEM_PATH=%(python -m certifi)s
+          for /f "delims=" %%i in ('python -c "import certifi,sys; print(certifi.where())"') do set "CERTIFI_PEM_PATH=%%i"
           python -m nuitka --standalone --onefile ^
             --nofollow-import-to=yt_dlp.extractor.lazy_extractors ^
             --include-data-file="ffmpeg.exe=ffmpeg.exe" ^
