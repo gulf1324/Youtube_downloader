@@ -66,7 +66,7 @@ jobs:
         shell: cmd
       - name: Build with Nuitka
         run: |
-          python -m nuitka --standalone --onefile --nofollow-import-to=yt_dlp.extractor.lazy_extractors --include-data-file="ffmpeg.exe=ffmpeg.exe" --include-package=certifi --windows-console-mode=force --assume-yes-for-downloads --clean-cache=all Youtube_downloader.py
+          python -m nuitka --standalone --onefile --nofollow-import-to=yt_dlp.extractor.lazy_extractors --include-data-file="ffmpeg.exe=ffmpeg.exe" --include-package=requests --windows-console-mode=force --assume-yes-for-downloads --clean-cache=all Youtube_downloader.py
         shell: cmd
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
