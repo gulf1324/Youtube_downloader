@@ -55,8 +55,8 @@ jobs:
       - name: Install cached dependencies
         run: pip install -r requirements.txt
       
-      - name: Install latest yt-dlp from GitHub
-        run: pip install --upgrade yt-dlp
+      # - name: Install latest yt-dlp from GitHub
+      #   run: pip install --upgrade yt-dlp
       
       - name: Download ffmpeg
         run: |
@@ -66,7 +66,7 @@ jobs:
         shell: cmd
       - name: Build with Nuitka
         run: |
-          python -m nuitka --standalone --onefile --nofollow-import-to=yt_dlp.extractor.lazy_extractors --include-data-file="ffmpeg.exe=ffmpeg.exe" --include-package=certifi --windows-console-mode=force --assume-yes-for-downloads Youtube_downloader.py
+          python -m nuitka --standalone --onefile --nofollow-import-to=yt_dlp.extractor.lazy_extractors --include-data-file="ffmpeg.exe=ffmpeg.exe" --include-package=certifi --include-package-data=certifi --windows-console-mode=force --assume-yes-for-downloads Youtube_downloader.py
         shell: cmd
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
