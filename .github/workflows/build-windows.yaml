@@ -66,13 +66,13 @@ jobs:
         shell: cmd
       - name: Build with Nuitka
         run: |
-          for /f "delims=" %%i in ('python -c "import certifi; print(certifi.where())"') do set "CERTIFI_PEM_PATH=%%i"
           python -m nuitka --standalone --onefile ^
             --nofollow-import-to=yt_dlp.extractor.lazy_extractors ^
             --include-data-file="ffmpeg.exe=ffmpeg.exe" ^
-            --include-data-file="%CERTIFI_PEM_PATH%=certifi/cacert.pem" ^
+            --include-module=requests.certs ^
             --windows-console-mode=force ^
             --assume-yes-for-downloads ^
+            --show-modules ^
             Youtube_downloader.py
         shell: cmd
       - name: Upload Artifact
