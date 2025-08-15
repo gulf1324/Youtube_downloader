@@ -1,4 +1,4 @@
 Nuitka==2.6.9
 requests
-certifi
+certifi==2025.6.15
 yt-dlp

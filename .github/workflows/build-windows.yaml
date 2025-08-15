@@ -69,10 +69,8 @@ jobs:
           python -m nuitka --standalone --onefile ^
             --nofollow-import-to=yt_dlp.extractor.lazy_extractors ^
             --include-data-file="ffmpeg.exe=ffmpeg.exe" ^
-            --include-module=certifi.core ^
             --windows-console-mode=force ^
             --assume-yes-for-downloads ^
-            --show-modules ^
             Youtube_downloader.py
         shell: cmd
       - name: Upload Artifact
