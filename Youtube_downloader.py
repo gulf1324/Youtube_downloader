@@ -89,14 +89,32 @@ def download_youtube(url):
         print(f"\nError: {str(e)}")
 
 def main():
-    check_yt_dlp_version()
+    try:
+        check_yt_dlp_version()
+    except Exception as e:
+        print(f"[ERROR] Failed to check yt-dlp version: {e}")
+        print("Continuing anyway...\n")
+    
     while True:
-        url = input("Enter the YouTube URL (or 'quit' to exit): ")
-        if url.lower() == 'quit':
+        try:
+            url = input("Enter the YouTube URL (or 'quit' to exit): ")
+            if url.lower() == 'quit':
+                break
+            if url:
+                download_youtube(url)
+            input("\nPress Enter to continue downloading or close the window...")
+        except KeyboardInterrupt:
+            print("\n\nOperation cancelled by user.")
             break
-        if url:
-            download_youtube(url)
-        input("\nPress Enter to continue downloading or close the window...")
+        except Exception as e:
+            print(f"\n[ERROR] An unexpected error occurred: {e}")
+            input("\nPress Enter to continue or close the window...")
+    
+    input("\nPress Enter to exit...")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"\n[FATAL ERROR] {e}")
+        input("\nPress Enter to exit...")
