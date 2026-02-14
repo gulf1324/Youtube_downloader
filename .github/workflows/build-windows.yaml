@@ -49,7 +49,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.11'
           cache: 'pip'
       
       - name: Install cached dependencies
@@ -66,18 +66,27 @@ jobs:
         shell: cmd
       - name: Build with Nuitka
         run: |
-          python -m nuitka --standalone --onefile ^
+          python -m nuitka --standalone ^
             --nofollow-import-to=yt_dlp.extractor.lazy_extractors ^
             --include-data-file="ffmpeg.exe=ffmpeg.exe" ^
             --windows-console-mode=force ^
             --assume-yes-for-downloads ^
+            --company-name="Youtube_downloader" ^
+            --product-name="YouTube Downloader" ^
+            --file-version="1.0.0" ^
+            --product-version="1.0.0" ^
+            --file-description="Simple script for downloading YouTube videos" ^
             Youtube_downloader.py
+        shell: cmd
+      - name: Package as zip
+        run: |
+          7z a Youtube_downloader_windows.zip .\Youtube_downloader.dist\*
         shell: cmd
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Youtube_downloader_windows
-          path: Youtube_downloader.exe
+          path: Youtube_downloader_windows.zip
 
   release:
     needs: [check-yt-dlp-version, build-windows]
@@ -110,7 +119,7 @@ jobs:
 
             > ### Updates
             > - `yt-dlp` updated to version `${{ needs.check-yt-dlp-version.outputs.new_version }}`.
-          files: Youtube_downloader.exe 
+          files: Youtube_downloader_windows.zip 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
